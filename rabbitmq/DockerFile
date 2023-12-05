@@ -1,0 +1,21 @@
+FROM centos:7
+# Update the system and install basic utilities
+ENV RELEASE_BASE=https://packages.2600hz.com/centos/7/stable/2600hz-release
+ENV RELEASE_VER=4.3
+ENV META_PKG=2600hz-release-${RELEASE_VER}-0.el7.centos.noarch.rpm
+ENV LATEST_RELEASE=${RELEASE_BASE}/${RELEASE_VER}/${META_PKG}
+
+RUN yum -y update && yum clean all
+RUN yum -y install epel-release && yum clean all
+RUN yum -y install wget curl net-tools wget
+RUN wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+RUN rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+
+RUN echo "signalwire" > /etc/yum/vars/signalwireusername
+RUN echo "pat_92HiXjNgtcBS3WXKwzRqwcPB" > /etc/yum/vars/signalwiretoken
+
+RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(cat /etc/yum/vars/signalwiretoken) https://freeswitch.signalwire.com/repo/yum/centos_release/freeswitch-release-repo-0-1.noarch.rpm
+RUN yum install -y ${LATEST_RELEASE} --skip-broken
+RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
+RUN yum install -y erlang
+RUN yum install -y kazoo-rabbitmq
