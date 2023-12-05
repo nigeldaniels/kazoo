@@ -1,0 +1,23 @@
+FROM centos:7
+# Update the system and install basic utilities
+ENV RELEASE_BASE=https://packages.2600hz.com/centos/7/stable/2600hz-release
+ENV RELEASE_VER=4.3
+ENV META_PKG=2600hz-release-${RELEASE_VER}-0.el7.centos.noarch.rpm
+ENV LATEST_RELEASE=${RELEASE_BASE}/${RELEASE_VER}/${META_PKG}
+# Add the CouchDB repository
+RUN echo $'[bintray--apache-couchdb-rpm]\n\
+name=bintray--apache-couchdb-rpm\n\
+baseurl=http://apache.bintray.com/couchdb-rpm/el$releasever/$basearch/\n\
+gpgcheck=0\n\
+repo_gpgcheck=0\n\
+enabled=1' > /etc/yum.repos.d/couchdb.repo
+
+RUN rpm --import https://couchdb.apache.org/repo/keys.asc
+RUN rpm --import https://couchdb.apache.org/repo/rpm-package-key.asc
+
+RUN yum -y update && yum clean all
+RUN yum -y install epel-release && yum clean all
+RUN yum -y install wget curl net-tools wget
+
+RUN yum install -y couchdb
+RUN yum clean all

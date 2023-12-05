@@ -1,0 +1,43 @@
+version: '3.3'
+services:
+
+  freeswitch:
+    hostname: freeswitch
+    build:
+      context: ./freeswitch
+      dockerfile: DockerFile
+    networks:
+      lan:
+        ipv4_address:
+
+
+  rabbitmq:
+    hostname: rabbitmq
+    build:
+        context: ./rabbitmq
+        dockerfile: DockerFile
+
+  kamailio:
+    hostname: kamailio
+    build:
+      context: ./kamailio
+      dockerfile: DockerFile
+
+  couchdb:
+    image: couchdb:2.3.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+
+  haproxy:
+    hostname: haproxy
+    build:
+      context: ./haproxy
+      dockerfile: DockerFile
+
+networks:
+  lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
