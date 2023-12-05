@@ -8,7 +8,7 @@ services:
       dockerfile: DockerFile
     networks:
       lan:
-        ipv4_address: 10.10.0.1
+        ipv4_address: 10.10.1.1
 
 
   rabbitmq:
@@ -18,7 +18,7 @@ services:
         dockerfile: DockerFile
     networks:
         lan:
-            ipv4_address: 10.10.0.2
+            ipv4_address: 10.10.1.2
 
   kamailio:
     hostname: kamailio
@@ -27,7 +27,7 @@ services:
       dockerfile: DockerFile
     networks:
       lan:
-        ipv4_address: 10.10.0.3
+        ipv4_address: 10.10.1.3
 
   couchdb:
     image: couchdb:2.3.1
@@ -36,7 +36,7 @@ services:
       - COUCHDB_PASSWORD=admin
     networks:
       lan:
-        ipv4_address: 10.10.0.4
+        ipv4_address: 10.10.1.4
 
   haproxy:
     hostname: haproxy
@@ -45,11 +45,11 @@ services:
       dockerfile: DockerFile
     networks:
         lan:
-            ipv4_address: 10.10.0.5
+            ipv4_address: 10.10.1.5
 
 networks:
   lan:
     driver: bridge
     ipam:
       config:
-        - subnet: 10.10.0.0/24
+        - subnet: 10.10.1.0/24

@@ -17,6 +17,7 @@ RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(c
 RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
 RUN yum install -y kazoo-kamailio --skip-broken
+
 RUN yum clean all
 
 cmd ["tail", "-f", "/dev/null"]

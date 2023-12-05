@@ -7,7 +7,7 @@ ENV LATEST_RELEASE=${RELEASE_BASE}/${RELEASE_VER}/${META_PKG}
 
 RUN yum -y update && yum clean all
 RUN yum -y install epel-release && yum clean all
-RUN yum -y install wget curl net-tools wget
+RUN yum -y install wget curl net-tools wget vim
 RUN wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
 RUN rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
 
@@ -18,4 +18,29 @@ RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(c
 RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
 RUN yum install -y erlang
-RUN yum install -y kazoo-rabbitmq
+RUN yum install -y kazoo-rabbitmq \
+
+# This is based on the prepare() function that ships with the kazoo-rabbitmq package
+ENV RABBITMQ_USER=rabbitmq \
+    RABBITMQ_BIN=/usr/lib/rabbitmq/bin/rabbitmq-server \
+    RABBITMQ_PID=/var/run/rabbitmq/kazoo-rabbitmq.pid \
+    RABBITMQ_ENV=/etc/kazoo/rabbitmq/rabbitmq-env.conf \
+    RABBITMQ_HOME=/var/lib/rabbitmq \
+    RABBITMQ_CONFIG_FILE=/etc/kazoo/rabbitmq/rabbitmq \
+    RABBITMQ_ENABLED_PLUGINS_FILE=/etc/kazoo/rabbitmq/enabled_plugins \
+    RABBITMQ_NODENAME=kazoo-rabbitmq
+
+RUN rm -rf /var/lib/rabbitmq/mnesia/kazoo-rabbit* && \
+    mkdir -p ${RABBITMQ_HOME} && \
+    chown -R ${RABBITMQ_USER} ${RABBITMQ_HOME} && \
+    mkdir -p /var/log/rabbitmq && \
+    chown -R ${RABBITMQ_USER} /var/log/rabbitmq && \
+    mkdir -p /var/run/rabbitmq && \
+    chown -R ${RABBITMQ_USER} /var/run/rabbitmq && \
+    if [ -e ${RABBITMQ_PID} ]; then \
+        rm -rf ${RABBITMQ_PID}; \
+    fi
+
+COPY rabbitmq-env.conf ${RABBITMQ_ENV}
+
+CMD["rabbitmq-server"]
