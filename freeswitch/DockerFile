@@ -16,6 +16,7 @@ RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
 RUN yum clean all
 
-RUN yum install -y kazoo-freeswitch --skip-broken
+RUN yum install -y kazoo-freeswitch
 
-CMD ["tail", "-f", "/dev/null"]
+#CMD ["/usr/bin/freeswitch", "-nc", "-nf"]
+CMD ["/usr/bin/freeswitch", "-conf", "/etc/kazoo/freeswitch/", "-log", "/usr/local/freeswtich/log", "-db" ,"/var/lib/freeswitch/db", "-nonat"]
