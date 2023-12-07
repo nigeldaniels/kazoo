@@ -16,5 +16,8 @@ RUN echo "pat_92HiXjNgtcBS3WXKwzRqwcPB" > /etc/yum/vars/signalwiretoken
 RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(cat /etc/yum/vars/signalwiretoken) https://freeswitch.signalwire.com/repo/yum/centos_release/freeswitch-release-repo-0-1.noarch.rpm
 RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
-RUN yum -y install kazoo-haproxy socat --skip-broken
+RUN yum -y install kazoo-haproxy
 RUN yum clean all
+
+#CMD ["haproxy", "-f", "/etc/kazoo/haproxy/haproxy.cfg"]
+CMD ["/usr/sbin/haproxy-systemd-wrapper", "-f", "/etc/haproxy/haproxy.cfg"]
