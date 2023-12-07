@@ -17,7 +17,6 @@ RUN echo "gpgcheck=0" >> /etc/yum.repos.d/2600hz-stable.repo
 RUN echo "sslverify=false" >> /etc/yum.repos.d/2600hz-stable.repo
 
 
-
 RUN echo "signalwire" > /etc/yum/vars/signalwireusername
 RUN echo "pat_92HiXjNgtcBS3WXKwzRqwcPB" > /etc/yum/vars/signalwiretoken
 
@@ -56,4 +55,3 @@ RUN chmod +x start-rabbitmq.sh
 
 
 CMD ["./start-rabbitmq.sh"]
-#CMD ["tail", "-f", "/dev/null"]

@@ -9,15 +9,14 @@ RUN yum -y update && yum clean all
 RUN yum -y install epel-release && yum clean all
 RUN yum -y install wget curl net-tools wget
 
-
 RUN echo "signalwire" > /etc/yum/vars/signalwireusername
 RUN echo "pat_92HiXjNgtcBS3WXKwzRqwcPB" > /etc/yum/vars/signalwiretoken
 
 RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(cat /etc/yum/vars/signalwiretoken) https://freeswitch.signalwire.com/repo/yum/centos_release/freeswitch-release-repo-0-1.noarch.rpm
 RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
-RUN yum install -y kazoo-kamailio --skip-broken
+RUN yum install -y kazoo-kamailio
 
 RUN yum clean all
 
-cmd ["tail", "-f", "/dev/null"]
+CMD ["kamailio", "-DD", "-E"]
