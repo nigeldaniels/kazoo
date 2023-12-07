@@ -17,12 +17,18 @@ RUN echo "gpgcheck=0" >> /etc/yum.repos.d/2600hz-stable.repo
 RUN echo "sslverify=false" >> /etc/yum.repos.d/2600hz-stable.repo
 
 
+
 RUN echo "signalwire" > /etc/yum/vars/signalwireusername
 RUN echo "pat_92HiXjNgtcBS3WXKwzRqwcPB" > /etc/yum/vars/signalwiretoken
 
 RUN wget --http-user=$(cat /etc/yum/vars/signalwireusername) --http-password=$(cat /etc/yum/vars/signalwiretoken) https://freeswitch.signalwire.com/repo/yum/centos_release/freeswitch-release-repo-0-1.noarch.rpm
 RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
+
+RUN yum remove erlang erlang-* -y
+RUN wget https://github.com/rabbitmq/erlang-rpm/releases/download/v20.3.8.15/erlang-20.3.8.15-1.el7.centos.x86_64.rpm
+RUN yum install -y erlang-20.3.8.15-1.el7.centos.x86_64.rpm
+
 RUN yum install -y kazoo-rabbitmq
 
 RUN chown -R rabbitmq:rabbitmq /var/lib/rabbitmq

@@ -12,6 +12,7 @@ services:
 
 
   rabbitmq:
+    platform: linux/amd64
     hostname: rabbitmq
     build:
         context: ./rabbitmq
