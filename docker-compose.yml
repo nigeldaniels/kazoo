@@ -62,6 +62,16 @@ services:
         lan:
             ipv4_address: 10.10.1.7
 
+  ecallmgr:
+    platform: linux/amd64
+    hostname: ecallmgr
+    build:
+      context: ./ecallmgr
+      dockerfile: DockerFile
+    networks:
+        lan:
+            ipv4_address: 10.10.1.8
+
 networks:
   lan:
     driver: bridge
