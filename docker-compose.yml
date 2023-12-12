@@ -64,7 +64,7 @@ services:
 
   ecallmgr:
     platform: linux/amd64
-    hostname: ecallmgr
+    hostname: ecallmgr.kazoo.net
     build:
       context: ./ecallmgr
       dockerfile: DockerFile

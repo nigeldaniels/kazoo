@@ -9,6 +9,8 @@ ENV KAZOO_NODE kazoo-ecallmgr
 ENV LOG_DIR /var/log/kazoo
 ENV LOG_FILE ${LOG_DIR}/ecallmgr.log
 ENV PID_FILE /var/run/kazoo/${KAZOO_NODE}.pid
+ENV BINDIR=/opt/kazoo/erts-8.3.5.7/bin
+
 
 RUN yum -y update && yum clean all
 RUN yum -y install epel-release && yum clean all
@@ -21,7 +23,7 @@ RUN yum install -y ${LATEST_RELEASE} --skip-broken
 RUN rpm -i --replacefiles freeswitch-release-repo-0-1.noarch.rpm
 
 RUN yum install -y kazoo-core
-
+RUN chmod -R u+rwX,go+rX,go-w /opt/kazoo
 RUN rm -rf ${LOG_DIR} && \
     mkdir -p ${LOG_DIR} /tmp/erl_pipes/${KAZOO_NODE} /var/run/kazoo && \
     touch ${LOG_FILE} && \
@@ -32,3 +34,4 @@ COPY kazoo_start_script.sh /usr/local/bin/kazoo_start_script.sh
 RUN chmod +x /usr/local/bin/kazoo_start_script.sh
 
 CMD ["/usr/local/bin/kazoo_start_script.sh", "start"]
+#CMD ["tail", "-f", "/dev/null"]
