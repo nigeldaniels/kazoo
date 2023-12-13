@@ -54,7 +54,7 @@ services:
 
   kazoo-applications:
     platform: linux/amd64
-    hostname: kazoo-applications
+    hostname: kazoo-applications.kazoo.net
     build:
       context: ./kazoo-applications
       dockerfile: DockerFile
